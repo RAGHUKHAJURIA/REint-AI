@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-// Get API base URL from Vite environment variables or use default
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
+// Get API base URL from Vite environment variables or use relative path for production
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
+  (window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api');
 
 /**
  * Fetch generation data from backend API

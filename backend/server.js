@@ -7,10 +7,15 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Middleware
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'];
+const allowedOrigins = [
+  'http://localhost:5173', 
+  'http://localhost:5174', 
+  'http://localhost:5175',
+  /\.vercel\.app$/ // Allow all Vercel deployments
+];
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1 || process.env.FRONTEND_URL === origin) {
+    if (!origin || allowedOrigins.some(o => typeof o === 'string' ? o === origin : o.test(origin)) || process.env.FRONTEND_URL === origin) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
