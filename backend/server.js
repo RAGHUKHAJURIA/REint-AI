@@ -28,6 +28,10 @@ app.use(express.json());
 // Routes
 app.use('/api', generationRoutes);
 
+app.get('/', (req, res) => {
+  res.send("home page")
+})
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
