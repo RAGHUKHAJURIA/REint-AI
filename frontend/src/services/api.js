@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Get API base URL from Vite environment variables or use relative path for production
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
-  (window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api');
+  (window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : 'https://r-eint-ai.vercel.app/api');
 
 /**
  * Fetch generation data from backend API
