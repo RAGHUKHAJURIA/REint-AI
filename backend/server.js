@@ -33,8 +33,10 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-app.listen(PORT, () => {
-  console.log(`Wind Forecast API server running on port ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Wind Forecast API server running on port ${PORT}`);
+  });
+}
 
 module.exports = app;
