@@ -1,95 +1,254 @@
 # Wind Forecast Monitoring App
 
-A production-quality web application to visualize and analyze the accuracy of wind power generation forecasts in the United Kingdom. It compares actual wind generation against forecasted generation using data from the Elexon BMRS API.
+A production-quality full-stack application that visualizes and analyzes the accuracy of wind power generation forecasts in the United Kingdom using data from the Elexon BMRS platform.
 
-## 🚀 Project Overview
-
-This project provides a full-stack solution for monitoring grid-scale wind power generation. It includes:
-- **Data Analysis**: A comprehensive Jupyter notebook analyzing forecast errors, time-of-day patterns, and generation reliability.
-- **Backend API**: A Node.js/Express server that fetches and serves wind generation and forecast data.
-- **Frontend Dashboard**: A modern React application featuring interactive Recharts visualizations and a custom Forecast Horizon filter.
-
-### Forecast Horizon Logic
-The application implements a strict **4-hour Forecast Horizon** rule. For any target time $T$, it selects the latest forecast published at or before $T - 4$ hours. This allows energy traders and grid operators to assess the quality of information available for short-term planning.
-
-## 📁 Project Structure
-
-```text
-wind-forecast-app/
-├── analysis/               # Data Science & Research
-│   ├── analysis.ipynb      # Professional analysis report
-│   └── data/               # Raw data exports (optional)
-├── backend/                # Node.js / Express API
-│   ├── server.js           # API Entry point
-│   ├── routes/             # API Route definitions
-│   └── services/           # External API integration
-├── frontend/               # React / Vite Dashboard
-│   ├── src/                # UI Components and Logic
-│   └── public/             # Static assets
-└── README.md               # Project documentation
-```
-
-## 🛠️ Tech Stack
-
-- **Data Science**: Python, Pandas, Matplotlib, Jupyter.
-- **Backend**: Node.js, Express, Axios.
-- **Frontend**: React 19, Vite, TailwindCSS, Recharts, Lucide React.
-
-## ⚙️ Setup Instructions
-
-### Prerequisites
-- Node.js (v18+)
-- npm
-
-### 1. Repository Setup
-```bash
-git clone <repository-url>
-cd wind-forecast-app
-```
-
-### 2. Backend Setup
-```bash
-cd backend
-npm install
-```
-Create a `.env` file in the `backend` directory:
-```env
-PORT=3001
-FRONTEND_URL=http://localhost:5173
-```
-
-### 3. Frontend Setup
-```bash
-cd ../frontend
-npm install
-```
-
-## 🏁 Running the Application
-
-### Start the Backend
-```bash
-cd backend
-npm run dev
-```
-The API will run on `http://localhost:3001`.
-
-### Start the Frontend
-```bash
-cd frontend
-npm run dev
-```
-The application will be available at `http://localhost:5173`.
-
-## 📊 Data Analysis Report
-To view the detailed statistical analysis:
-1. Navigate to the `analysis/` folder.
-2. Open `analysis.ipynb` using Jupyter Lab or VS Code.
-3. The report covers MAE, RMSE, P10/P20 reliability metrics, and time-of-day error characteristics.
-
-## 🌐 Deployment
-- **Backend**: Suitable for deployment on Render or Railway (Node.js runtime).
-- **Frontend**: [Vercel](https://vercel.com) (Vite preset).
-- **Demo Link**: [App on Vercel](https://your-app-link.vercel.app)
+The system allows users to compare **actual wind generation vs forecasted generation** and analyze forecast accuracy over time.
 
 ---
-*Developed as part of an engineering challenge focused on grid-scale energy forecasting.*
+
+# Project Overview
+
+This project consists of two main components:
+
+1. **Forecast Monitoring Application**
+2. **Forecast Error Analysis**
+
+The application helps users intuitively understand the accuracy of wind generation forecasts.
+
+The quantity being forecasted is **national-level wind power generation in the UK**.
+
+The dashboard visualizes:
+
+- Actual generation values (blue line)
+- Forecast generation values (green line)
+
+Users can select:
+
+- Start time
+- End time
+- Forecast horizon
+
+---
+
+# Forecast Horizon Logic
+
+For each generation timestamp **T**, the application selects the latest forecast created at least **H hours before T**.
+
+Example:
+
+Target Time = 24/05/24 18:00  
+Forecast Horizon = 4 hours
+
+The selected forecast must satisfy:
+
+publishTime ≤ 18:00 − 4h = 14:00
+
+Among these forecasts, the **most recent publishTime** is selected.
+
+This ensures the forecast reflects information that would have been available before the generation occurred.
+
+---
+
+# Data Sources
+
+Data is obtained from the **Elexon BMRS API**.
+
+Actual Generation Dataset:
+
+https://bmrs.elexon.co.uk/api-documentation/endpoint/datasets/FUELHH/stream
+
+Fields used:
+
+startTime → generation timestamp  
+generation → wind power generated  
+fuelType → filtered for WIND
+
+Forecast Dataset:
+
+https://bmrs.elexon.co.uk/api-documentation/endpoint/datasets/WINDFOR/stream
+
+Fields used:
+
+startTime → forecast target time  
+publishTime → time forecast was created  
+generation → forecasted generation
+
+The analysis focuses on **January 2024 data**.
+
+---
+
+# Project Structure
+wind-forecast-app
+│
+├── analysis
+│ └── analysis.ipynb
+│
+├── backend
+│ ├── server.js
+│ ├── routes
+│ └── services
+│
+├── frontend
+│ ├── src
+│ └── public
+│
+└── README.md
+
+
+---
+
+# Tech Stack
+
+Frontend
+
+React  
+Vite  
+TailwindCSS  
+Recharts
+
+Backend
+
+Node.js  
+Express  
+Axios
+
+Data Analysis
+
+Python  
+Pandas  
+Matplotlib  
+Jupyter Notebook
+
+Deployment
+
+Frontend → Vercel  
+Backend → Render / Railway
+
+---
+
+# Setup Instructions
+
+## Clone the Repository
+git clone https://github.com/RAGHUKHAJURIA/REint-AI.git
+
+cd wind-forecast-app
+
+# Backend Setup
+
+cd backend
+npm install
+
+Create a `.env` file in the backend directory:
+
+PORT=3000
+
+FRONTEND_URL=http://localhost:5173
+
+npm run dev
+
+# Frontend Setup
+
+cd frontend
+npm install
+
+npm run dev
+
+
+---
+
+# Forecast Monitoring Dashboard
+
+Features:
+
+Interactive line chart showing:
+
+Actual wind generation  
+Forecast wind generation
+
+User controls:
+
+Start time selector  
+End time selector  
+Forecast horizon slider
+
+The chart updates dynamically based on selected parameters.
+
+The UI is responsive and works on both **desktop and mobile devices**.
+
+---
+
+# Data Analysis
+
+The `analysis.ipynb` notebook analyzes forecast accuracy and wind power reliability.
+
+The analysis includes:
+
+Forecast error metrics:
+
+Mean Error  
+Median Error  
+P99 Error  
+Mean Absolute Error (MAE)  
+Root Mean Squared Error (RMSE)
+
+Additional analysis:
+
+Error distribution  
+Error vs time-of-day  
+Actual vs forecast comparison  
+Wind generation probability distribution
+
+Reliability analysis:
+
+Wind generation percentiles were computed to estimate reliable generation capacity.
+
+The **P10 percentile** is used as a conservative estimate of reliably available wind power.
+
+---
+
+# Deployment
+
+Frontend deployed on:
+
+Vercel
+
+App Demo:
+
+https://r-eint-ai-fun1.vercel.app/
+
+Backend can be deployed on:
+
+Render  
+Railway
+
+---
+
+# AI Tools Used
+
+AI tools such as **Cursor AI and ChatGPT** were used to assist with:
+
+Code scaffolding  
+Debugging  
+Library usage
+
+However, the **analysis reasoning and interpretation were developed manually**.
+
+---
+
+# Submission Components
+
+This submission includes:
+
+Forecast monitoring web application  
+Jupyter notebook analysis  
+Source code repository with commit history  
+Deployment link  
+Demo video explaining the project
+
+---
+
+# License
+
+This project was developed as part of a software engineering hiring challenge.
+
+
